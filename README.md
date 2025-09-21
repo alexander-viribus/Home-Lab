@@ -1,6 +1,6 @@
 # Homelab Network Topology
 
-**Purpose:** Employer-facing documentation of a segmented homelab network: firewall & edge, routed VLANs, Proxmox-hosted services, monitoring and automated config backups. This README documents addressing, routing/VLAN design, monitoring, and backup flows. See `diagram.jpg` in the repo for the visual topology referenced throughout.
+**Purpose:** Segmented homelab network: firewall & edge, routed VLANs, Proxmox-hosted services, monitoring and automated config backups. This README documents addressing, routing/VLAN design, monitoring, and backup flows. See `HomeLab.jpg` in the repo for the visual topology referenced throughout.
 
 ---
 
@@ -9,17 +9,17 @@
 | Layer | Device / Subnet | Purpose |
 |---|---:|---|
 | WAN / Edge | `ISP Modem` → `pfSense` | Internet gateway, DHCP, NAT, IPsec site-to-site VPN |
-| LAN (pfSense) | `10.0.0.0/24` | Default LAN, printer, general admin workstation |
-| Wireless | `10.1.0.0/24` | Wireless AP (DNS filtering / safe-browsing) |
-| Routed VLANs | VLAN 2: `192.168.2.0/24` | Infrastructure / servers (Proxmox + VMs) |
-| Routed VLANs | VLAN 3: `192.168.3.0/24` | End-user workstation(s) |
-| Offsite / cloud | `172.17.0.0/22` (remote site) / AWS | Remote Proxmox + Windows DC; Gitea on AWS for config backups |
+| pfSense Router | `10.0.0.0/24` | Default LAN, printer, general admin workstation |
+| Cisco Router | VLANs `192.168.2.0/24`, `192.168.3.0/24` | Infrastructure / servers (Proxmox + VMs), Workstations |
+| Wireless | Access Point - Subnet `10.1.0.0/24` | Wireless access (DNS filtering / safe-browsing) |
+| Offsite - AWS | E2C Virtual Machine | Gitea on AWS for config backups |
+| Offsite - Cluster| Windows Server `172.17.0.6/22`| Remote Proxmox + Windows DC |
 
 ---
 
 ## 1 — WAN & Edge (pfSense)
 
-**Role:** primary gateway to the Internet, DHCP server, edge firewall, NAT, and site-to-site IPsec termination.
+**Role:** primary gateway to the Internet, DHCP server for `10.0.0.0/24` and `10.1.0.0/24` networks , firewall, and site-to-site IPsec termination.
 
 **Key configuration & behavior**
 - **External connection:** ISP modem provides the public IP; pfSense sits behind it as the internal gateway.
