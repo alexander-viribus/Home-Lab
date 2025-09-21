@@ -137,5 +137,29 @@ interface GigabitEthernet1/1
 
 - **AWS VPN Tunnel:** This Site-to-Site VPN (AWS VPN Connection vpn-0988432276dde398e) was fully configured between the Cisco router and an AWS Virtual Private Gateway. The connection used two redundant IPSec tunnels. The VPN has now been decommissioned: the VPN Connection object was removed from AWS:
 
-- 
+Example (redacted) router snippets that were in place prior to decommissioning:
+
+```text
+crypto isakmp policy 200
+  encryption aes 128
+  authentication pre-share
+  group 2
+  lifetime 28800
+  hash sha
+exit
+
+crypto keyring keyring-vpn-0988432276dde398e-0
+  local-address 76.112.64.147
+  pre-shared-key address 18.116.105.57 key <REDACTED-PSK-1>
+exit
+
+interface Tunnel1
+  ip address 169.254.128.154 255.255.255.252
+  tunnel source 76.112.64.147
+  tunnel destination 18.116.105.57
+  tunnel protection ipsec profile ipsec-vpn-0988432276dde398e-0
+  ip tcp adjust-mss 1379
+  no shutdown
+exit
+```
 ---
