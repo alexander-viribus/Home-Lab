@@ -166,16 +166,3 @@ curl -I http://192.168.2.100
 ```
 
 ---
-
-## 10 — Operational summary (for employers / auditors)
-
-- **Why this design:** VLAN segmentation reduces blast radius, centralizes monitoring and backups, and allows secure cross-site services via IPsec.
-- **High-value features:** automated configuration backups (Oxidized → Gitea), centralized monitoring (Zabbix), site-to-site VPN for AD and replication workflows.
-- **Change control:** device config commits in Gitea provide an auditable history of changes; Zabbix confirms availability and trends.
-
----
-
-## Change log
-- `v1.0` — Initial README: network layout, subnets, devices, monitoring & backup flows.
-
----
