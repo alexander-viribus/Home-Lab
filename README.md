@@ -27,9 +27,9 @@
   - DHCP pools:
     - Dynamic: `10.0.0.3–10.0.0.99`
     - Static/reserved: `10.0.0.100–10.0.0.254` (reserved for servers/printers)
-- **Wireless subnet:** `10.1.0.0/24` — DNS filtering applied (e.g., pfBlockerNG or filtered resolver).
+- **Wireless subnet:** `10.1.0.0/24` — DNS content filtering service applied.
 - **Site-to-site IPsec VPN:** connects to remote homelab `172.17.0.0/22`. Remote Domain Controller: `172.17.10.13`. Tunnel provides routing between local networks and remote AD/DC for authentication and resource access.
-- **NAT / Port forwards:** pfSense handles upstream NAT. Selected inbound ports (SSH, management ports) are forwarded to the Cisco router which then NATs/forwards to internal VMs (controlled exposure).
+- **Internal Routing:** Routing / Controlled exposure: pfSense routes traffic to the Cisco router for internal networks (192.168.2.0/24, etc.).
 
 **Design notes (employer-focused):**
 - pfSense centralizes perimeter security and VPN termination.
