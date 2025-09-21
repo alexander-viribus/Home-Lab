@@ -13,13 +13,13 @@
 | Cisco Router | VLANs `192.168.2.0/24`, `192.168.3.0/24` | Infrastructure / servers (Proxmox + VMs), Workstations |
 | Wireless | Access Point - Subnet `10.1.0.0/24` | Wireless access (DNS filtering / safe-browsing) |
 | Offsite - AWS | E2C Virtual Machine | Gitea on AWS for config backups |
-| Offsite - Cluster| Windows Server `172.17.0.6/22`| Remote Proxmox + Windows DC |
+| Offsite - Cluster| Windows Server `172.17.0.6/22` (site-to-site VPN)| Remote Proxmox + Windows DC |
 
 ---
 
 ## 1 — WAN/Edge Router (pfSense)
 
-**Role:** primary gateway to the Internet, DHCP server for `10.0.0.0/24` and `10.1.0.0/24` networks , firewall, and site-to-site IPsec termination.
+**Role:** primary gateway to the Internet, DHCP server for `10.0.0.0/24` and `10.1.0.0/24` networks, firewall, and site-to-site IPsec termination.
 
 **Key configuration & behavior**
 - **External connection:** ISP modem provides the public IP; pfSense sits behind it as the internal gateway.
@@ -27,6 +27,8 @@
   - DHCP pools:
     - Dynamic: `10.0.0.3–10.0.0.99`
     - Static/reserved: `10.0.0.100–10.0.0.254` (reserved for servers/printers)
+    - `10.0.0.146` — Network printer
+    - `10.0.0.125` — Local admin workstation
 - **Wireless subnet:** `10.1.0.0/24` — DNS content filtering service applied.
 - **Site-to-site IPsec VPN:** connects to remote homelab `172.17.0.0/22`. Remote Domain Controller: `172.17.10.13`. Tunnel provides routing between local networks and remote AD/DC for authentication and resource access.
 - **Internal Routing:** pfSense routes traffic to the Cisco router for internal networks (192.168.2.0/24, etc.).
@@ -80,41 +82,33 @@ interface GigabitEthernet1/1
 
 **VM inventory (IPs & roles)**
 - `192.168.2.100` — **Zabbix**  
-  - Monitors: pfSense, Cisco ISR, Catalyst switch, TrueNAS, MySQL servers, Oxidized, WAN/VPN endpoints, offsite Windows DC, AWS Gitea. Uses SNMP, agent checks and ICMP/TCP probes.
+  - Monitors: pfSense, Cisco ISR, Catalyst switch, TrueNAS, MySQL servers, Oxidized, WAN/VPN endpoints, offsite Windows DC, AWS Gitea. Uses SNMP, agent checks, and ICMP/TCP probes.
 - `192.168.2.3` — **MySQL (Zabbix DB)**  
 - `192.168.2.4` — **MySQL Backup** (replica / scheduled snapshot target)  
-- `192.168.2.5` — **Windows Workstation** (domain-joined via VPN)  
+- `192.168.2.5` — **Windows Workstation** (domain-joined via site-to-site VPN)  
 - `192.168.2.6` — **TrueNAS** (SMB shares for backups/ISOs)  
 - `192.168.2.7` — **Oxidized** (pulls configs from pfSense & Cisco; pushes to AWS Gitea)
 
 **Access & admin**
-- VMs are reachable via SSH through controlled NAT/port-forward entries on the Cisco router. Proxmox web UI is not publicly exposed — use jump hosts or VPN for administration.
+- VMs are reachable via SSH through controlled NAT/port-forward entries on the Cisco router. Proxmox, Zabbix, TrueNas, etc. web UIs are not publicly exposed.
 
 ---
 
 ## 4 — VLAN 3 (End-user / Workstation)
 
 - `192.168.3.2` — End-user workstation
-- Purpose: user tasks and testing. Routed access to VLAN 2 is controlled via ACLs on the router.
+- Purpose: user tasks and testing for successful establishment of multiple VLANs.
 
 ---
 
-## 5 — LAN (pfSense LAN / `10.0.0.0/24`)
-
-- `10.0.0.146` — Network printer
-- `10.0.0.125` — Local admin workstation
-- Note: this is the pfSense-managed home LAN. Access to VLANs controlled by firewall rules.
-
----
-
-## 6 — External Resources
+## 5 — External Resources
 
 - **AWS EC2 (Gitea)** — remote Git server for Oxidized backups (offsite versioning & audit history).
 - **Remote Proxmox cluster** — reachable via pfSense IPsec tunnel (`172.17.0.0/22`); Windows DC at `172.17.10.13` provides AD services to domain-joined clients.
 
 ---
 
-## 7 — Monitoring & Backups
+## 6 — Monitoring & Backups
 
 **Zabbix**
 - Uses SNMP, Zabbix agent, ICMP/TCP checks to monitor device uptime, resource metrics and services.
@@ -128,7 +122,7 @@ interface GigabitEthernet1/1
 
 ---
 
-## 8 — Access, Security & Hardening (summary)
+## 7 — Access, Security & Hardening (summary)
 
 - **Perimeter:** pfSense enforces stateful firewalling and terminates IPsec VPNs.
 - **Segmentation:** Servers (VLAN 2) isolated from workstations (VLAN 3) and wireless (10.1.0.0/24).
@@ -139,7 +133,7 @@ interface GigabitEthernet1/1
 
 ---
 
-## 9 — Quick verification & troubleshooting commands
+## 8 — Quick verification & troubleshooting commands
 
 **Cisco router / switch**
 ```text
