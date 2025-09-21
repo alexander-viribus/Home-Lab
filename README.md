@@ -52,19 +52,19 @@
 
 **Illustrative Cisco snippets (example only):**
 ```text
-interface GigabitEthernet0/1
+interface GigabitEthernet0/0/1
  no ip address
 !
-interface GigabitEthernet0/1.2
+interface GigabitEthernet0/0/1.2
  encapsulation dot1q 2
  ip address 192.168.2.1 255.255.255.0
 !
-interface GigabitEthernet0/1.3
+interface GigabitEthernet0/0/1.3
  encapsulation dot1q 3
  ip address 192.168.3.1 255.255.255.0
 ```
 ```text
-interface GigabitEthernet1/1
+interface GigabitEthernet0/0/1
  switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk allowed vlan 2,3
@@ -149,14 +149,14 @@ crypto isakmp policy 200
 exit
 
 crypto keyring keyring-vpn-0988432276dde398e-0
-  local-address 76.112.64.147
-  pre-shared-key address 18.116.105.57 key <REDACTED-PSK-1>
+  local-address 76.xxx.xxx.xxx
+  pre-shared-key address 18.xxx.xxx.xxx key <REDACTED-PSK-1>
 exit
 
 interface Tunnel1
   ip address 169.254.128.154 255.255.255.252
-  tunnel source 76.112.64.147
-  tunnel destination 18.116.105.57
+  tunnel source 76.xxx.xxx.xxx
+  tunnel destination 18.xxx.xxx.xxx
   tunnel protection ipsec profile ipsec-vpn-0988432276dde398e-0
   ip tcp adjust-mss 1379
   no shutdown
