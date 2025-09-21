@@ -29,9 +29,9 @@
     - Static/reserved: `10.0.0.100–10.0.0.254` (reserved for servers/printers)
 - **Wireless subnet:** `10.1.0.0/24` — DNS content filtering service applied.
 - **Site-to-site IPsec VPN:** connects to remote homelab `172.17.0.0/22`. Remote Domain Controller: `172.17.10.13`. Tunnel provides routing between local networks and remote AD/DC for authentication and resource access.
-- **Internal Routing:** Routing / Controlled exposure: pfSense routes traffic to the Cisco router for internal networks (192.168.2.0/24, etc.).
+- **Internal Routing:** pfSense routes traffic to the Cisco router for internal networks (192.168.2.0/24, etc.).
 
-**Design notes (employer-focused):**
+**Design notes:**
 - pfSense centralizes perimeter security and VPN termination.
 - Wireless is segmented to reduce risk to core infrastructure and enforce safe-browsing by DNS policy.
 
@@ -69,7 +69,7 @@ interface GigabitEthernet1/1
 ```
 
 **Design notes:**
-- Router handles inter-VLAN routing and ACL enforcement between VLANs; segmentation reduces attack surface and simplifies network management.
+- Cisco router represents successful internal routing and network segmentation; reduces attack surface and simplifies network management.
 
 ---
 
