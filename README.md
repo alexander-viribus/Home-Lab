@@ -50,7 +50,7 @@
 - **Switch trunking:** switch uplink uses 802.1Q trunk to carry VLAN 2 and VLAN 3 to the Cisco router. Port connecting Proxmox is an access port assigned to VLAN 2.
 - **Inter-VLAN routing & ACLs:** Router enforces routing policies, ACLs, and NAT upstream to pfSense router and Internet egress.
 
-**Illustrative Cisco snippets (example only):**
+**Illustrative Cisco snippets:**
 ```text
 interface GigabitEthernet0/0/1
  no ip address
