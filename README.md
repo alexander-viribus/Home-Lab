@@ -6,7 +6,7 @@
 
 ## At a glance
 
-| Layer | Device / Subnet | Purpose |
+| Entity | Device / Subnet | Purpose |
 |---|---:|---|
 | WAN / Edge | `ISP Modem` → `pfSense` | Internet gateway, DHCP, NAT, IPsec site-to-site VPN |
 | pfSense Router | `10.0.0.0/24` | Default LAN, printer, general admin workstation |
