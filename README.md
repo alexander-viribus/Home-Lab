@@ -97,14 +97,15 @@ interface GigabitEthernet1/1
 ## 4 — VLAN 3 (End-user / Workstation)
 
 - `192.168.3.2` — End-user workstation
-- Purpose: user tasks and testing for successful establishment of multiple VLANs.
+- **Purpose:** user tasks and testing for successful establishment of multiple VLANs.
 
 ---
 
 ## 5 — External Resources
 
-- **AWS EC2 (Gitea)** — remote Git server for Oxidized backups (offsite versioning & audit history).
+- **AWS EC2 (Gitea)** — remote Git server for network config backups pushed by Oxidized server residing locally on VLAN 2.
 - **Remote Proxmox cluster** — reachable via pfSense IPsec tunnel (`172.17.0.0/22`); Windows DC at `172.17.10.13` provides AD services to domain-joined clients.
+- **Purpose:** Successful establishment of site-to-site persistent VPN tunnel, remote domain controller, and AWS EC2 implementation with elastic IP.
 
 ---
 
@@ -112,21 +113,21 @@ interface GigabitEthernet1/1
 
 **Zabbix**
 - Uses SNMP, Zabbix agent, ICMP/TCP checks to monitor device uptime, resource metrics and services.
-- Alerts configured for tunnel failure, host down, service degradation; integrate with email/Slack/webhooks.
+- Alerts configured for tunnel failure, host down, service degradation.
 
 **Oxidized**
-- Polls network devices (SSH) on schedule (or on-change) and commits configs to a Git repository (AWS Gitea) for versioning and rollback.
+- Polls pfSense and Cisco routers (SSH) on schedule, backup configs locally, and then pushes configs to offsite Git repository (AWS EC2 running Rocky Linux - Gitea).
 
 **Backups**
-- MySQL primary replicates/dumps to `192.168.2.4` and snapshots to TrueNAS. Critical configs are versioned in Gitea offsite.
+- MySQL primary replicates/dumps to MySQL backup at `192.168.2.4` 
 
 ---
 
 ## 7 — Access, Security & Hardening (summary)
 
 - **Perimeter:** pfSense enforces stateful firewalling and terminates IPsec VPNs.
-- **Segmentation:** Servers (VLAN 2) isolated from workstations (VLAN 3) and wireless (10.1.0.0/24).
-- **Least privilege:** Management ports are not exposed publicly; remote admin uses NATed SSH with logging or VPN/jump hosts.
+- **Segmentation:** Servers (VLAN 2) isolated from workstations (VLAN 3), pfSense LAN (10.0.0.0/24), and wireless (10.1.0.0/24).
+- **Least privilege:** Management ports are not exposed publicly.
 - **Config backups:** Oxidized → Gitea (offsite) provides versioning and rollback for device configs.
 - **Monitoring:** Zabbix provides alerts and trend analysis.
 - **Recommendations:** enable MFA for admin accounts, strict router ACLs for inter-VLAN flows, and scheduled updates/patching for all network and VM hosts.
