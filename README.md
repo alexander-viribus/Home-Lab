@@ -17,7 +17,7 @@
 
 ---
 
-## 1 — WAN & Edge (pfSense)
+## 1 — WAN/Edge Router (pfSense)
 
 **Role:** primary gateway to the Internet, DHCP server for `10.0.0.0/24` and `10.1.0.0/24` networks , firewall, and site-to-site IPsec termination.
 
@@ -37,7 +37,7 @@
 
 ---
 
-## 2 — Routing Layer (Cisco)
+## 2 — Internal Router (Cisco)
 
 **Devices:** Cisco ISR4331 (router), Catalyst WS-C3750 (switch)
 
@@ -46,7 +46,7 @@
   - `Gi0/1.2` → VLAN 2 → `192.168.2.0/24` (server/infrastructure)
   - `Gi0/1.3` → VLAN 3 → `192.168.3.0/24` (workstations)
 - **Switch trunking:** switch uplink uses 802.1Q trunk to carry VLAN 2 and VLAN 3 to the Cisco router. Port connecting Proxmox is an access port assigned to VLAN 2.
-- **Inter-VLAN routing & ACLs:** Router enforces routing policies and ACLs between VLANs; pfSense remains upstream for NAT and Internet egress.
+- **Inter-VLAN routing & ACLs:** Router enforces routing policies, ACLs, and NAT upstream to pfSense router and Internet egress.
 
 **Illustrative Cisco snippets (example only):**
 ```text
