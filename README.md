@@ -130,34 +130,12 @@ interface GigabitEthernet1/1
 - **Least privilege:** Management ports are not exposed publicly.
 - **Config backups:** Oxidized → Gitea (offsite) provides versioning and rollback for device configs.
 - **Monitoring:** Zabbix provides alerts and trend analysis.
-- **Recommendations:** enable MFA for admin accounts, strict router ACLs for inter-VLAN flows, and scheduled updates/patching for all network and VM hosts.
 
 ---
 
-## 8 — Quick verification & troubleshooting commands
+## 8 — Decommissioned
 
-**Cisco router / switch**
-```text
-show ip interface brief
-show running-config interface GigabitEthernet0/1
-show vlan brief
-show ip route
-```
+- **AWS VPN Tunnel:** This Site-to-Site VPN (AWS VPN Connection vpn-0988432276dde398e) was fully configured between the Cisco router and an AWS Virtual Private Gateway. The connection used two redundant IPSec tunnels. The VPN has now been decommissioned: the VPN Connection object was removed from AWS:
 
-**pfSense (GUI / diagnostics)**
-- GUI: Status → System Logs, Status → IPsec
-- CLI/Diagnostics test commands: `ping`, `traceroute`; `ipsec statusall` on pfSense shell if available
-
-**Monitoring host / admin shell**
-```bash
-# test SSH reachability
-nc -vz 192.168.2.7 22
-
-# SNMP walk example
-snmpwalk -v2c -c <community> 192.168.2.1 SNMPv2-MIB::sysDescr.0
-
-# test web UI
-curl -I http://192.168.2.100
-```
-
+- 
 ---
