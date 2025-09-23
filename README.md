@@ -84,10 +84,10 @@ interface GigabitEthernet0/0/1
 - `192.168.2.100` — **Zabbix**  
   - Monitors: pfSense, Cisco ISR, Catalyst switch, TrueNAS, MySQL servers, Oxidized, WAN/VPN endpoints, offsite Windows DC, AWS Gitea. Uses SNMP, agent checks, and ICMP/TCP probes.
 - `192.168.2.3` — **MySQL (Zabbix DB)**  
-- `192.168.2.4` — **MySQL Backup** (replica / scheduled snapshot target)  
+- `192.168.2.4` — **MySQL Backup** (replica / scheduled snapshot target; pushes to offsite AWS Gitea VM)  
 - `192.168.2.5` — **Windows Workstation** (domain-joined via site-to-site VPN)  
 - `192.168.2.6` — **TrueNAS** (SMB shares for backups/ISOs)  
-- `192.168.2.7` — **Oxidized** (pulls configs from pfSense & Cisco; pushes to AWS Gitea)
+- `192.168.2.7` — **Oxidized** (pulls configs from pfSense & Cisco; pushes to offsite AWS Gitea VM)
 
 **Access & admin**
 - VMs are reachable via SSH through controlled NAT/port-forward entries on the Cisco router. Proxmox, Zabbix, TrueNas, etc. web UIs are not publicly exposed.
