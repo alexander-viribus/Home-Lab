@@ -103,8 +103,8 @@ interface GigabitEthernet0/0/1
 
 ## 5 — External Resources
 
-- **AWS EC2 (Gitea)** — remote Git server for network config backups pushed by Oxidized server residing locally on VLAN 2.
-- **Remote Proxmox cluster** — reachable via pfSense IPsec tunnel (`172.17.0.0/22`); Windows DC at `172.17.10.13` provides AD services to domain-joined clients.
+- **AWS EC2 (Gitea)** — Remote Git repository for storing backups pushed from Oxidized and MySQL-Backup, both local to VLAN 2.
+- **Remote Proxmox cluster** — Reachable via pfSense IPsec tunnel (`172.17.0.0/22`); Windows DC at `172.17.10.13` provides AD services to domain-joined clients.
 - **Purpose:** Successful establishment of site-to-site persistent VPN tunnel, remote domain controller, and AWS EC2 implementation with elastic IP.
 
 ---
@@ -119,7 +119,7 @@ interface GigabitEthernet0/0/1
 - Polls pfSense and Cisco routers (SSH) on schedule, backup configs locally, and then pushes configs to offsite Git repository (AWS EC2 running Rocky Linux - Gitea).
 
 **Backups**
-- MySQL primary replicates/dumps to MySQL backup at `192.168.2.4` 
+- MySQL primary replicates/dumps to MySQL backup at `192.168.2.4` and also utilizes Git to push backups offsite to AWS Gitea VM.
 
 ---
 
@@ -133,7 +133,7 @@ interface GigabitEthernet0/0/1
 
 ---
 
-## 8 — Decommissioned
+## — Decommissioned —
 
 - **AWS VPN Tunnel:** This Site-to-Site VPN (AWS VPN Connection vpn-0988432276dde398e) was fully configured between the Cisco router and an AWS Virtual Private Gateway. The connection used two redundant IPSec tunnels. The VPN has now been decommissioned: the VPN Connection object was removed from AWS:
 
