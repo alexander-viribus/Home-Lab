@@ -1,6 +1,6 @@
 # Homelab Network Topology
 
-**Purpose:** Segmented homelab network: firewall & edge, routed VLANs, Proxmox-hosted services, monitoring and automated config backups. This README documents addressing, routing/VLAN design, monitoring, and backup flows. See `HomeLab.jpg` in the repo for the visual topology referenced throughout.
+**Purpose:** Segmented homelab network: firewall & edge, routed VLANs, Proxmox-hosted services, monitoring and automated config backups. This README documents addressing, routing/VLAN design, monitoring, and backup flows. See `HomeLab_Diagram.jpg` in the repo for the visual topology referenced throughout.
 
 ---
 
